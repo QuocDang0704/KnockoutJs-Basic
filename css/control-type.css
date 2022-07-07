@@ -1,0 +1,60 @@
+body {
+    font-family: arial;
+    font-size: 14px;
+    margin: auto;
+}
+
+.liveExample {
+    padding: 1em;
+    background-color: #EEEEDD;
+    border: 1px solid #CCC;
+    max-width: 755px;
+}
+
+.liveExample input {
+    font-family: Arial;
+}
+
+.liveExample b {
+    font-weight: bold;
+}
+
+.liveExample p {
+    margin-top: 0.9em;
+    margin-bottom: 0.9em;
+}
+
+.liveExample select[multiple] {
+    width: 100%;
+    height: 8em;
+}
+
+.liveExample h2 {
+    margin-top: 0.4em;
+}
+
+.readout {
+    width: 17em;
+    float: right;
+}
+
+.readout td {
+    width: 50%;
+}
+
+tr {
+    vertical-align: top
+}
+
+td {
+    padding: 0.2em 0.2em 0.6em 0.2em;
+}
+
+td.label {
+    text-align: right;
+    padding-right: 0.5em;
+}
+
+input[type=radio] {
+    margin: 0 0.25em 0 0.25em
+}

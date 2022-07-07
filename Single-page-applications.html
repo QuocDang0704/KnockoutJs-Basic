@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single page applications</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- css -->
+    <link rel="stylesheet" href="css/coderunner.css">
+    <link rel="stylesheet" href="css/webmail.css">
+</head>
+
+<body>
+    <!-- Folders -->
+    <ul class="folders" data-bind="foreach: folders">
+        <li data-bind="text: $data,
+               css: { selected: $data == $root.chosenFolderId() },
+               click: $root.goToFolder"></li>
+    </ul>
+    <!-- Mails grid -->
+    <table class="mails" data-bind="with: chosenFolderData">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Subject</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: mails">
+            <tr data-bind="click: $root.goToMail">
+                <td data-bind="text: from"></td>
+                <td data-bind="text: to"></td>
+                <td data-bind="text: subject"></td>
+                <td data-bind="text: date"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Chosen mail -->
+    <div class="viewMail" data-bind="with: chosenMailData">
+        <div class="mailInfo">
+            <h1 data-bind="text: subject"></h1>
+            <p><label>Id</label>: <span data-bind="text: id"></span></p>
+            <p><label>From</label>: <span data-bind="text: from"></span></p>
+            <p><label>To</label>: <span data-bind="text: to"></span></p>
+            <p><label>Date</label>: <span data-bind="text: date"></span></p>
+        </div>
+        <!-- <p class="message" data-bind="html: messageContent" /> -->
+    </div>
+
+    <script>
+        function WebmailViewModel() {
+            // Data
+            let self = this;
+            self.folders = ['Inbox', 'Archive', 'Sent', 'Spam'];
+            self.chosenFolderId = ko.observable();
+            self.chosenFolderData = ko.observable();
+            self.chosenMailData = ko.observable();
+
+            // Behaviours
+            self.goToFolder = function (folder) {
+                self.chosenFolderId(folder);
+                self.chosenMailData(null); // Stop showing a mail
+                // $.get('http://learn.knockoutjs.com/mail', { folder: folder }, self.chosenFolderData);
+                //$.get('/json/'+folder+'.json', self.chosenFolderData);
+                $.getJSON('/json/'+folder+'.json', function(data) {
+                    //self.hienThi = true;
+                    self.chosenFolderData(data);
+                });
+            };
+            self.goToMail = function(mail) {
+                self.chosenFolderId(mail.folder);
+                // self.chosenFolderData(null); // Stop showing a folder
+                //$.get("http://learn.knockoutjs.com/mail", { mailId: mail.id }, self.chosenMailData);
+               
+                var valueMails = self.chosenFolderData().mails;
+                for(var i=0; i< valueMails.length -1; i++) {
+                    if (valueMails[i].id == mail.id) {
+                        self.chosenMailData(valueMails[i]);
+                        self.chosenFolderData(null);
+                        break;
+                    }
+                }
+            };
+            self.goToFolder('Inbox');
+        };
+
+        ko.applyBindings(new WebmailViewModel());
+    </script>
+</body>
+
+</html>
