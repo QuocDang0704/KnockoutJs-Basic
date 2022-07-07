@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-   <title>KnockoutJS Subscribe</title>
+   <title>Hi Guy!!</title>
    <script src="https://knockoutjs.com/downloads/knockout-3.5.1.js" type="text/javascript"></script>
 </head>
 
@@ -9,22 +9,43 @@
    <p>First name: <input data-bind="value: firstName" /></p>
    <p>Last name: <input data-bind="value: lastName" /></p>
    <p>Full name: <strong data-bind="text: fullName"></strong></p>
-   <p>Full name: <strong data-bind="text: isFullname"></strong></p>
+
+   <p>Nhập ngày sinh: <input type="date" data-bind="value: dateBirth" /></p>
+   <span data-bind="text: consologDate"></span>
 
    <script>
       function AppViewModel() {
          this.firstName = ko.observable("Quốc");
          this.lastName = ko.observable("Bảo");
+         this.consologDate = ko.observable();
 
          // this.fullName = ko.computed(function () {
          //    return this.firstName() + " " + this.lastName();
          // }, this);
          this.isFullname = ko.isComputed(this.firstName());
-         
-         this.fullName = ko.pureComputed(function() {
+
+         this.fullName = ko.pureComputed(function () {
             return this.firstName() + " " + this.lastName();
-         }, this).extend({notify: "alway" });
-         AppViewModel.fullName('QUOOC').firstName('B');
+         }).extend({ notify: "alway" });
+
+         this.dateBirth = ko.pureComputed({
+            read: function () {
+               return this.consologDate('No Data');
+            },
+            write: function (params) {
+               age = Date.parse(params);
+
+               var today = new Date(params).toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'numeric',
+                  year: 'numeric'
+               }).split('/').join('-');
+
+               console.log(today);
+               return this.consologDate(params);
+            },
+            owner: this
+         })
       }
 
       ko.applyBindings(AppViewModel);

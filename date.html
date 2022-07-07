@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-   <head >
-      <title>KnockoutJS Writable Computed Observable</title>
-      <script src = "https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
-   </head>
-   
-   <body>
-      <p>Enter your birth Date: <input type = "date" data-bind = "value: rawDate" ></p>
-      <p><span data-bind = "text: yourAge"></span></p>
-      <input type = "datetime-local" >
 
-      <script>
-         function MyViewModel() {
-            this.yourAge = ko.observable();
-            today = new Date();
-            rawDate = ko.observable();
+<head>
+   <title>KnockoutJS Writable Computed Observable</title>
+   <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
+</head>
 
-            this.rawDate = ko.pureComputed ({
-               read: function() {
-                  return this.yourAge;
-               },
-               
-               write: function(value) {
-                  var b = Date.parse(value);    // convert birth date into milliseconds
-                  var t = Date.parse(today);    // convert todays date into milliseconds
-                  diff = t - b;                 // take difference
-                  var y = Math.floor(diff/31449600000);     // difference is converted
-                                                            // into years. 31449600000
-                                                            //milliseconds form a year.
-                                                            
-                  var m = Math.floor((diff % 31449600000)/604800000/4.3);  // calculating
-                                                                           // months.
-                                                                           // 604800000
-                                                                           // milliseconds
-                                                                           // form a week.
-                                                                           
-                  this.yourAge("You are " + y + " year(s) " + m +" months old.");
-               },
-               owner: this
-            });
-         }
-         
-         ko.applyBindings(new MyViewModel());
-      </script>
-      
-   </body>
+<body>
+   <p>Enter your birth Date: <input type="date" data-bind="value: rawDate"></p>
+   <p><span data-bind="text: yourAge"></span></p>
+
+   <script>
+      function MyViewModel() {
+         this.yourAge = ko.observable();
+         today = new Date();
+         rawDate = ko.observable();
+
+         this.rawDate = ko.pureComputed({
+            read: function () {
+               return this.yourAge('Cant not find value');
+            },
+
+            write: function (value) {
+               var b = Date.parse(value);    // convert birth date into milliseconds
+               var t = Date.parse(today);    // convert todays date into milliseconds
+               diff = t - b;                 // take difference
+               var y = Math.floor(diff / 31449600000);     // difference is converted
+               // into years. 31449600000
+               //milliseconds form a year.
+
+               var m = Math.floor((diff % 31449600000) / 604800000 / 4.3);  // calculating
+               // months.
+               // 604800000
+               // milliseconds
+               // form a week.
+
+               this.yourAge("You are " + y + " year(s) " + m + " months old.");
+            },
+            owner: this
+         });
+      }
+
+      ko.applyBindings(new MyViewModel());
+   </script>
+
+</body>
+
 </html>
